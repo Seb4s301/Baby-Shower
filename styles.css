@@ -41,7 +41,7 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.12;
+  opacity: 0.28;
   background-image:
     url("Imagenes/alegrosito.png"),
     url("Imagenes/alegrosita.png"),
@@ -54,17 +54,18 @@ body::before {
     url("Imagenes/osito_verte.png");
   background-repeat: no-repeat;
   background-position:
-    left 16px top 10%,
+    left 16px top 4%,
     left 16px top 28%,
-    left 16px top 46%,
-    left 16px top 64%,
-    left 16px top 82%,
-    right 16px top 10%,
+    left 16px top 52%,
+    left 16px top 76%,
+    left 16px top 92%,
+    right 16px top 4%,
     right 16px top 28%,
-    right 16px top 46%,
-    right 16px top 64%,
-    right 16px top 82%;
-  background-size: 120px;
+    right 16px top 52%,
+    right 16px top 76%,
+    right 16px top 92%;
+  /* uniform size for all side images to avoid stacking and inconsistencies */
+  background-size: clamp(56px, 9vw, 96px);
 }
 
 body::after {
@@ -73,11 +74,11 @@ body::after {
   left: 50%;
   transform: translateX(-50%);
   bottom: 0;
-  width: 320px;
-  height: 200px;
+  width: clamp(180px, 30vw, 320px);
+  height: clamp(120px, 18vw, 200px);
   pointer-events: none;
   z-index: 0;
-  opacity: 0.16;
+  opacity: 0.28;
   background-image: url("Imagenes/3ositos.png");
   background-repeat: no-repeat;
   background-position: center bottom;
@@ -498,16 +499,53 @@ body::after {
   }
   body::before {
     background-position:
-      left 12px top 12%,
-      left 12px bottom 14%,
-      right 12px top 12%,
-      right 12px bottom 14%,
-      right 12px center;
-    background-size: 120px, 90px, 110px, 100px, 140px;
+      left 12px top 6%,
+      left 12px top 30%,
+      left 12px top 54%,
+      left 12px top 78%,
+      left 12px top 92%,
+      right 12px top 6%,
+      right 12px top 30%,
+      right 12px top 54%,
+      right 12px top 78%,
+      right 12px top 92%;
+    background-size: clamp(40px, 12vw, 80px);
   }
   body::after {
-    width: 220px;
-    height: 140px;
-    opacity: 0.14;
+    width: clamp(140px, 40vw, 220px);
+    height: clamp(100px, 28vw, 140px);
+    opacity: 0.26;
   }
 }
+
+/* Tweak: smoother scaling for large/small screens */
+body::before {
+  /* Base responsive size: uniform for side images */
+  background-size: clamp(56px, 9vw, 96px);
+}
+
+/* ── Responsive images and spacing utility ── */
+/* Make all images scale to their container while keeping aspect ratio */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  /* margin 5px on each side produces 10px between adjacent images */
+  margin: 5px;
+}
+
+/* Utility container: place images in a flexible grid with 10px gap */
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* When using .image-grid, avoid double margins on imgs inside it */
+.image-grid img {
+  margin: 0;
+  /* allow images to shrink/grow; adjust basis as needed */
+  flex: 1 1 auto;
+  max-width: 100%;
+}
+
