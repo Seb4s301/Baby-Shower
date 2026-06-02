@@ -52,17 +52,14 @@ body::before {
     url("Imagenes/osito_verte.png");
   background-repeat: no-repeat;
   background-position:
-    left 16px top 4%,
-    left 16px top 28%,
+    left 16px top 8%,
+    left 16px top 30%,
     left 16px top 52%,
-    left 16px top 76%,
-    left 16px top 92%,
-    right 16px top 4%,
-    right 16px top 28%,
-    right 16px top 52%,
-    right 16px top 76%,
-    right 16px top 92%;
-  /* uniform size for all side images to avoid stacking and inconsistencies */
+    left 16px top 82%,
+    right 16px top 12%,
+    right 16px top 36%,
+    right 16px top 60%;
+  /* uniform size for all side images */
   background-size: clamp(56px, 9vw, 96px);
 }
 
@@ -497,16 +494,13 @@ body::after {
   }
   body::before {
     background-position:
-      left 12px top 6%,
-      left 12px top 30%,
-      left 12px top 54%,
-      left 12px top 78%,
-      left 12px top 92%,
-      right 12px top 6%,
-      right 12px top 30%,
-      right 12px top 54%,
-      right 12px top 78%,
-      right 12px top 92%;
+      left 12px top 8%,
+      left 12px top 28%,
+      left 12px top 48%,
+      left 12px top 68%,
+      right 12px top 12%,
+      right 12px top 36%,
+      right 12px top 60%;
     background-size: clamp(40px, 12vw, 80px);
   }
   body::after {
