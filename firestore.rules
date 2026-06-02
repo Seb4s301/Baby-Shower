@@ -1,0 +1,22 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /reservations/{docId} {
+
+      // Cualquiera puede leer las reservas
+      allow read: if true;
+
+      // Solo se puede crear, no modificar ni borrar
+      allow create: if
+        request.resource.data.keys().hasAll(['giftId', 'giftName', 'reservedBy', 'timestamp']) &&
+        request.resource.data.reservedBy is string &&
+        request.resource.data.reservedBy.size() >= 2 &&
+        request.resource.data.reservedBy.size() <= 60 &&
+        request.resource.data.giftName is string &&
+        request.resource.data.giftId is string;
+
+      // No se permite actualizar ni borrar desde el cliente
+      allow update, delete: if false;
+    }
+  }
+}

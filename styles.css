@@ -1,0 +1,513 @@
+/* ── Reset & variables ── */
+:root {
+  --bg: #FFFDF8;
+  --pink-main: #FFB6C9;
+  --pink-sugar: #FFD6E5;
+  --pink-soft: #FF8FB1;
+  --lavender: #DCC6FF;
+  --baby-blue: #CDEEFF;
+  --butter: #e7d674;
+  --mint: #D4F5E9;
+  --peach: #FFD8BE;
+  --gray-pink: #B8A8B0;
+  --text: #5A5560;
+  --shadow-soft: rgba(255, 143, 177, 0.15);
+  --shadow-strong: rgba(255, 143, 177, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Georgia', serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ── Decorative backgrounds ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+  background-image:
+    url("Imagenes/alegrosito.png"),
+    url("Imagenes/alegrosita.png"),
+    url("Imagenes/amorosita.png"),
+    url("Imagenes/dormilonsito.png"),
+    url("Imagenes/gruñonsito.png"),
+    url("Imagenes/generosita.png"),
+    url("Imagenes/osita_morada.png"),
+    url("Imagenes/ositamorada2.png"),
+    url("Imagenes/osito_verte.png");
+  background-repeat: no-repeat;
+  background-position:
+    left 16px top 10%,
+    left 16px top 28%,
+    left 16px top 46%,
+    left 16px top 64%,
+    left 16px top 82%,
+    right 16px top 10%,
+    right 16px top 28%,
+    right 16px top 46%,
+    right 16px top 64%,
+    right 16px top 82%;
+  background-size: 120px;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 320px;
+  height: 200px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.16;
+  background-image: url("Imagenes/3ositos.png");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+}
+
+/* ── Header ── */
+.bs-header {
+  background-color: var(--bg);
+  border-bottom: 3px solid var(--pink-soft);
+  position: relative;
+  z-index: 1;
+}
+
+.bs-header .subtitle {
+  font-size: 0.9rem;
+  color: var(--butter);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.bs-header h1 {
+  font-size: 2.5rem;
+  color: var(--pink-soft);
+  font-weight: normal;
+  margin-bottom: 0.5rem;
+}
+
+.bs-header p {
+  color: var(--gray-pink);
+}
+
+.deco-line {
+  width: 80px;
+  border-top: 1px solid var(--butter);
+  opacity: 1;
+}
+
+.decoration span {
+  color: var(--butter);
+  font-size: 1.4rem;
+}
+
+/* ── Section titles ── */
+.section-title {
+  font-size: 1.1rem;
+  color: var(--pink-soft);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 2rem 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--butter);
+}
+
+/* ── Info box ── */
+.info-box {
+  background-color: var(--bg);
+  border-left: 4px solid var(--butter);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.info-box strong {
+  color: var(--pink-soft);
+}
+
+/* ── Gift grid */
+.gift-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+/* ── Gift cards */
+.gift-card {
+  background-color: var(--bg);
+  border: 1px solid var(--peach);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  position: relative;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease,
+              background-color 0.25s ease, transform 0.25s ease;
+  animation: cardIn 0.35s ease both;
+  z-index: 1;
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gift-card:hover {
+  box-shadow: 0 6px 20px rgba(255, 143, 177, 0.12);
+  transform: translateY(-2px);
+}
+
+.gift-card.reserved {
+  background-color: var(--pink-sugar);
+  border-color: var(--pink-soft);
+  border-width: 2px;
+  box-shadow: 0 2px 12px var(--shadow-soft);
+  animation: reservedPulse 0.5s ease;
+}
+
+@keyframes reservedPulse {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.7rem !important;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem !important;
+  border-radius: 20px !important;
+  font-weight: bold;
+}
+
+.badge.available {
+  background-color: var(--butter) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--butter);
+}
+
+.badge.reserved {
+  background-color: var(--pink-sugar) !important;
+  color: var(--pink-soft) !important;
+  border: 1px solid var(--pink-soft);
+}
+
+.gift-icon {
+  font-size: 2rem;
+}
+
+.gift-name {
+  font-size: 1.05rem;
+  color: var(--text);
+  font-weight: bold;
+}
+
+.gift-desc {
+  font-size: 0.85rem;
+  color: var(--gray-pink);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.gift-priority {
+  font-size: 0.75rem;
+  color: var(--butter);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.gift-priority.high {
+  color: var(--pink-soft);
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+/* ── Buttons */
+.btn.bs-btn-primary {
+  background-color: var(--pink-soft) !important;
+  color: var(--bg) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-family: inherit;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn.bs-btn-primary:hover:not(:disabled) {
+  background-color: var(--pink-main) !important;
+  color: var(--bg) !important;
+  transform: translateY(-1px);
+}
+
+.btn.bs-btn-primary:disabled,
+.btn.bs-btn-primary.disabled {
+  background-color: var(--gray-pink) !important;
+  color: var(--bg) !important;
+  border: none !important;
+  pointer-events: none;
+}
+
+.btn.bs-btn-outline {
+  background-color: transparent !important;
+  color: var(--pink-soft) !important;
+  border: 1px solid var(--pink-soft) !important;
+  border-radius: 8px !important;
+  font-family: inherit;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn.bs-btn-outline:hover {
+  background-color: var(--pink-sugar) !important;
+  color: var(--pink-soft) !important;
+  transform: translateY(-1px);
+}
+
+/* ── Floating action */
+.btn-reservas {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background-color: var(--pink-soft);
+  color: var(--bg);
+  border: none;
+  border-radius: 24px;
+  padding: 0.6rem 1.2rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px var(--shadow-strong);
+  z-index: 50;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-reservas:hover {
+  background-color: var(--pink-main);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 143, 177, 0.4);
+}
+
+/* ── Offcanvas / panels */
+.offcanvas {
+  font-family: 'Georgia', serif;
+}
+
+.offcanvas-header {
+  background-color: var(--bg);
+  border-bottom: 2px solid var(--butter);
+}
+
+.offcanvas-title {
+  color: var(--pink-soft);
+}
+
+.panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.panel-item {
+  background: var(--bg);
+  border: 1px solid var(--peach);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  animation: slideIn 0.3s ease both;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.panel-gift {
+  font-weight: bold;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.panel-person {
+  font-size: 0.85rem;
+  color: var(--gray-pink);
+}
+
+.panel-empty {
+  color: var(--gray-pink);
+  font-style: italic;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+/* ── Modal */
+.bs-modal-content {
+  border-radius: 16px !important;
+  border-top: 4px solid var(--pink-soft) !important;
+  font-family: 'Georgia', serif;
+  background: var(--bg) !important;
+}
+
+.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - 1rem);
+}
+
+.modal-title {
+  color: var(--pink-soft);
+}
+
+.gift-modal-name {
+  color: var(--gray-pink);
+  font-style: italic;
+  font-size: 1rem;
+}
+
+/* ── Forms */
+.bs-input {
+  border: 1px solid var(--peach) !important;
+  border-radius: 8px !important;
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: inherit;
+}
+
+.bs-input:focus {
+  border-color: var(--butter) !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 243, 176, 0.25) !important;
+}
+
+.bs-input.is-invalid {
+  border-color: var(--pink-soft) !important;
+}
+
+.modal-reserva-list {
+  text-align: left;
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-reserva-item {
+  background: var(--bg);
+  border: 1px solid var(--peach);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  animation: fadeIn 0.25s ease both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-reserva-empty {
+  color: var(--gray-pink);
+  font-style: italic;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+/* ── Footer */
+.bs-footer {
+  color: var(--gray-pink);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--peach);
+  margin-top: 3rem;
+}
+
+.heart {
+  color: var(--butter);
+}
+
+/* ── Responsive */
+@media (max-width: 500px) {
+  .bs-header h1 {
+    font-size: 1.8rem;
+  }
+  .gift-grid {
+    grid-template-columns: 1fr;
+  }
+  body::before {
+    background-position:
+      left 12px top 12%,
+      left 12px bottom 14%,
+      right 12px top 12%,
+      right 12px bottom 14%,
+      right 12px center;
+    background-size: 120px, 90px, 110px, 100px, 140px;
+  }
+  body::after {
+    width: 220px;
+    height: 140px;
+    opacity: 0.14;
+  }
+}
