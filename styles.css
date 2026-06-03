@@ -53,10 +53,10 @@ body::before {
   background-repeat: no-repeat;
   background-position:
     left 16px top 8%,
-    right 16px top 30%,
+    right 16px top 9%,
     left 16px top 52%,
     left 16px top 82%,
-    left 16px top 12%,
+    left 16px top 30%,
     right 16px top 36%,
     right 16px top 60%;
   /* uniform size for all side images */
