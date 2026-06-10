@@ -79,11 +79,15 @@ function fetchSheetData() {
         var cols = parseCSVLine(line);
         var name = cols[0] || '';
         if (!name) return null;
+        var unlimited = (cols[1] || '').toLowerCase() === 'ilimitado';
+        var limitVal = parseInt(cols[2], 10);
+        // limit: -1 = ilimitado, 1 = un solo dueño, N = hasta N reservas
+        var limit = unlimited ? -1 : (limitVal > 0 ? limitVal : 1);
         return {
           id: String(i + 1),
           name: name,
-          unlimited: (cols[1] || '').toLowerCase() === 'ilimitado',
-          count: Number(cols[2]) || 0,
+          unlimited: unlimited,
+          limit: limit,
           priority: (cols[3] || '').toLowerCase().indexOf('alta') >= 0 ? 'high' : 'other',
           icon: ICON_MAP[name] || '🎁',
           desc: cols[4] || ''
@@ -114,7 +118,7 @@ function listenReservations() {
   });
 }
 
-function saveReservation(giftId, giftName, reservedBy, unlimited) {
+function saveReservation(giftId, giftName, reservedBy, limit) {
   var clean = String(reservedBy || 'Reservado').replace(/[<>'"%;()&+]/g, '').trim();
   if (!clean) clean = 'Reservado';
 
@@ -125,10 +129,23 @@ function saveReservation(giftId, giftName, reservedBy, unlimited) {
     timestamp: firebase.firestore.FieldValue.serverTimestamp()
   };
 
-  if (unlimited) {
+  // limit === -1 → ilimitado: siempre se puede agregar
+  if (limit === -1) {
     return db.collection('reservations').add(payload);
   }
 
+  // limit > 1 → múltiple pero acotado: usar subcolección o docs con sufijo
+  if (limit > 1) {
+    return db.runTransaction(function(tx) {
+      var colRef = db.collection('reservations');
+      return colRef.where('giftId', '==', giftId).get().then(function(snap) {
+        if (snap.size >= limit) throw new Error('Este regalo ya alcanzó su límite de reservas');
+        return colRef.add(payload);
+      });
+    });
+  }
+
+  // limit === 1 → solo una reserva (comportamiento original)
   var docRef = db.collection('reservations').doc(String(giftId));
   return db.runTransaction(function(tx) {
     return tx.get(docRef).then(function(doc) {
@@ -161,18 +178,28 @@ function renderGifts() {
 
   gifts.forEach(function(g) {
     var giftRes = reservations[g.id] || [];
-    var isReserved = !g.unlimited && giftRes.length > 0;
+    var reservedCount = giftRes.length;
+    // isFull: sin hueco disponible
+    var isFull = g.limit !== -1 && reservedCount >= g.limit;
 
     var card = document.createElement('div');
-    card.className = 'gift-card' + (isReserved ? ' reserved' : '');
+    card.className = 'gift-card' + (isFull ? ' reserved' : '');
 
     var badge = document.createElement('span');
-    if (g.unlimited) {
+    if (g.limit === -1) {
+      // Ilimitado
       badge.className = 'badge available';
-      badge.textContent = giftRes.length > 0 ? giftRes.length + ' reserva(s)' : 'Disponible';
+      badge.textContent = reservedCount > 0 ? reservedCount + ' reserva(s)' : 'Disponible';
+    } else if (g.limit > 1) {
+      // Límite numérico
+      badge.className = 'badge ' + (isFull ? 'reserved' : 'available');
+      badge.textContent = isFull
+        ? 'Completo (' + g.limit + '/' + g.limit + ')'
+        : reservedCount + '/' + g.limit + ' reservas';
     } else {
-      badge.className = 'badge ' + (isReserved ? 'reserved' : 'available');
-      badge.textContent = isReserved ? 'Reservado' : 'Disponible';
+      // Solo 1
+      badge.className = 'badge ' + (isFull ? 'reserved' : 'available');
+      badge.textContent = isFull ? 'Reservado' : 'Disponible';
     }
 
     var icon = document.createElement('div');
@@ -192,10 +219,10 @@ function renderGifts() {
     priority.className = 'gift-priority' + (g.priority === 'high' ? ' high' : '');
     priority.textContent = g.priority === 'high' ? '★ Alta prioridad' : '☆ Opcional';
 
-    var canReserve = g.unlimited || !isReserved;
+    var canReserve = !isFull;
     var btn = document.createElement('button');
     btn.className = 'btn bs-btn-primary btn-sm' + (!canReserve ? ' disabled' : '');
-    btn.textContent = !canReserve ? 'Reservado' : 'Reservar';
+    btn.textContent = !canReserve ? (g.limit === 1 ? 'Reservado' : 'Completo') : 'Reservar';
     btn.disabled = !canReserve;
     if (canReserve) {
       btn.addEventListener('click', (function(id) {
@@ -279,7 +306,7 @@ document.getElementById('btn-confirm').addEventListener('click', function() {
   confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Guardando...';
   bsModalReservar.hide();
 
-  saveReservation(g.id, g.name, 'Reservado', g.unlimited)
+  saveReservation(g.id, g.name, 'Reservado', g.limit)
     .catch(function(err) {
       console.error('Error al reservar:', err);
       alert('No se pudo guardar la reserva. Intenta de nuevo.');
